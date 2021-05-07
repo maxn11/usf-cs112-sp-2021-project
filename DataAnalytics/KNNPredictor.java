@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
 import java.lang.Math;
+//import java.util.List;
 
 public class KNNPredictor extends Predictor {
 	
@@ -143,13 +144,17 @@ public class KNNPredictor extends Predictor {
 	//test method
 	public String test(DataPoint point) {
 		//check if point is a test point
+		Double[][] arr = new Double[trainCount][2];
+		int xCounter = 0;
 		if (point.getIsTest() == true) {
-			Double[][] arr = new Double[trainCount][2];
-			int xCounter = 0;
-			for (int i = 0; i < data.size(); i++) {
-				if (data.get(i).getIsTest() == false) {
-					double testDistance = getDistance(point, data.get(i));
-					double testLabel = Double.parseDouble(data.get(i).getLabel());
+			//for (int i = 0; i < data.size(); i++) {
+			for (DataPoint d: data) {
+				//if (data.get(i).getIsTest() == false) {
+				if (d.getIsTest() == false) {
+					//double testDistance = getDistance(point, data.get(i));
+					double testDistance = getDistance(point, d);
+					//double testLabel = Double.parseDouble(data.get(i).getLabel());
+					double testLabel = d.getLabel().equals("1")? 1.0 : 0.0;
 					arr[xCounter][0] = testDistance;
 					arr[xCounter][1] = testLabel;
 					xCounter++;
@@ -168,11 +173,7 @@ public class KNNPredictor extends Predictor {
 			int oneCounter = 0;
 			int zeroCounter = 0;
 			for (int i = 0; i < k; i++) {
-				//Random rand = new Random();
-				//int randNum = rand.nextInt(trainCount);
-				//double kLabel = arr[randNum][1]; //- something wrong with order
 				double kLabel = arr[i][1];
-				//System.out.println(kLabel);
 				if (kLabel == 0.0) {
 					zeroCounter++;
 				} else {
@@ -189,6 +190,39 @@ public class KNNPredictor extends Predictor {
 		}
 		return (null);
 	}
+	
+	//graph helper method
+	/*
+	public ArrayList<Double> graphHelper(List<DataPoint> data) {
+		ArrayList<Double> arrList = new ArrayList<Double>();
+		double truePositive = 0;
+		double falsePositive = 0;
+		double trueNegative = 0;
+		double falseNegative = 0;
+		for (int i = 0; i < data.size(); i++) {
+			if (data.get(i).getIsTest() == true) {
+				String labelTest = test(data.get(i));
+				if(labelTest.equals("1") && data.get(i).getLabel().equals("1")) {
+					truePositive++;
+				}
+				else if(labelTest.equals("0") && data.get(i).getLabel().equals("0")) {
+					trueNegative++;
+				}
+				else if(labelTest.equals("1") && data.get(i).getLabel().equals("0")) {
+					falsePositive++;
+				}
+				else if(labelTest.equals("0") && data.get(i).getLabel().equals("1")) {
+					falseNegative++;
+				}
+			}
+		}
+		arrList.add(truePositive);
+		arrList.add(falsePositive);
+		arrList.add(trueNegative);
+		arrList.add(falseNegative);
+		return arrList;
+	}
+	*/
 	
 	//getAccuracy method
 	public Double getAccuracy(ArrayList<DataPoint> dataParam) {
@@ -213,10 +247,10 @@ public class KNNPredictor extends Predictor {
 				}
 			}
 		}
-		//System.out.println(truePositive);
-		//System.out.println(falsePositive);
-		//System.out.println(trueNegative);
-		//System.out.println(falseNegative);
+		System.out.println(truePositive);
+		System.out.println(falsePositive);
+		System.out.println(trueNegative);
+		System.out.println(falseNegative);
 		return ((truePositive + trueNegative) / (truePositive + trueNegative + 
 				 falsePositive + falseNegative));
 	}
@@ -250,7 +284,8 @@ public class KNNPredictor extends Predictor {
 		//System.out.println(falsePositive);
 		//System.out.println(trueNegative);
 		//System.out.println(falseNegative);
-		//tp tp fn
+		//fn tp tn emer
+		//tp tp fn right
 		return (falseNegative / (truePositive + trueNegative));
 	}
 	

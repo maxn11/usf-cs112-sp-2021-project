@@ -12,6 +12,7 @@ public class ProjectDriver {
 		ArrayList<DataPoint> data = new ArrayList<DataPoint>();
 		Predictor obj = new KNNPredictor();
 		data = (obj.readData("titanic.csv"));
+		//COPY AND PASTE THE ABOVE INTO MAIN METHOD OF GRAPH
 		
 		//accuracy and precision
 		double acc = obj.getAccuracy(data);
